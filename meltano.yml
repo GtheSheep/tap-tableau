@@ -1,0 +1,34 @@
+version: 1
+send_anonymous_usage_stats: true
+project_id: 94fe9a32-1e21-4309-a7f9-83a7a0c7636a
+plugins:
+  extractors:
+  - name: tap-tableau
+    namespace: tap_tableau
+    pip_url: -e .
+    capabilities:
+    - state
+    - catalog
+    - discover
+    - about
+    - stream-maps
+    settings:
+    - name: server_url
+    - name: api_version
+    - name: site_url_id
+    - name: personal_access_token_name
+    - name: personal_access_token_secret
+      kind: password
+    config:
+      server_url:
+      api_version:
+      site_url_id:
+      personal_access_token_name:
+      personal_access_token_secret:
+  - name: tap-tableau-metadata
+    inherit_from: tap-tableau
+    executable: tap-tableau-metadata
+  loaders:
+  - name: target-jsonl
+    variant: andyh1203
+    pip_url: target-jsonl
