@@ -1,29 +1,17 @@
 """GraphQL client handling, including TableauStream base class and TableauMetadataStream base class."""
 
 import requests
-from pathlib import Path
-from typing import Any, Dict, Optional, Union, List, Iterable
 from urllib.parse import urlparse
-
-import tableauserverclient as TSC
 
 from singer_sdk.streams import GraphQLStream
 from singer_sdk.authenticators import APIKeyAuthenticator
 from singer_sdk.streams import RESTStream
-from singer_sdk.tap_base import Tap
 
 
 class TableauStream(RESTStream):
     """Tableau stream class."""
 
     url_base = None
-
-    def __init__(self, tap: Tap):
-        super().__init__(tap)
-        authentication = TSC.PersonalAccessTokenAuth(self.config['personal_access_token_name'], self.config['personal_access_token_secret'], site_id=self.config.get('site_url_id'))
-        self.server_client = TSC.Server(self.config['server_url'], self.config['api_version']) if self.config.get('api_version') else TSC.Server(self.config['server_url'], use_server_version=True)
-        if not self.server_client.is_signed_in():
-            self.server_client.auth.sign_in(authentication)
 
 
 class TableauMetadataStream(GraphQLStream):
