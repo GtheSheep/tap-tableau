@@ -531,3 +531,29 @@ class CustomSQLLocationsMetadataStream(TableauMetadataStream):
         resp_json = response.json()
         for row in resp_json["data"]["customSQLTables"]:
             yield row
+
+
+class UsersMetadataStream(TableauMetadataStream):
+    name = "users_metadata"
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("name", th.StringType),
+    ).to_dict()
+    primary_keys = ["id"]
+    replication_key = None
+
+    @property
+    def query(self) -> str:
+        return """
+            query users {
+                tableauUsers {
+                    name
+                    id
+                }
+            }
+        """
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        resp_json = response.json()
+        for row in resp_json["data"]["tableauUsers"]:
+            yield row

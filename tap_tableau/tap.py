@@ -15,6 +15,7 @@ from tap_tableau.streams import (
     WorkbooksStream,
     CustomSQLLocationsMetadataStream,
     PublishedDatasourcesMetadataStream,
+    UsersMetadataStream,
     WorkbooksMetadataStream,
 )
 STREAM_TYPES = [
@@ -28,6 +29,7 @@ STREAM_TYPES = [
 METADATA_STREAM_TYPES = [
     CustomSQLLocationsMetadataStream,
     PublishedDatasourcesMetadataStream,
+    UsersMetadataStream,
     WorkbooksMetadataStream,
 ]
 
