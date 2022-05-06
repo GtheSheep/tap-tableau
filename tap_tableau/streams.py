@@ -498,6 +498,7 @@ class PublishedDatasourcesMetadataStream(TableauMetadataStream):
 class CustomSQLLocationsMetadataStream(TableauMetadataStream):
     name = "custom_sql_locations_metadata"
     schema = th.PropertiesList(
+        th.Property("id", th.StringType),
         th.Property("name", th.StringType),
         th.Property("downstreamWorkbooks", th.ArrayType(
             th.ObjectType(
@@ -505,44 +506,28 @@ class CustomSQLLocationsMetadataStream(TableauMetadataStream):
                 th.Property("name", th.StringType)
             )
         )),
-        th.Property("database", th.ObjectType(
-            th.Property("name", th.StringType),
-            th.Property("connectionType", th.StringType),
-        )),
-        th.Property("tables", th.ArrayType(
-            th.Property("name", th.StringType),
-        )),
         th.Property("query", th.StringType)
     ).to_dict()
-    primary_keys = ["name"]
+    primary_keys = ["id"]
     replication_key = None
 
     @property
     def query(self) -> str:
         return """
             query listCustomSQLTables {
-              customSQLTablesConnection{
-                nodes {
+                customSQLTables {
                   name
-                  downstreamWorkbooks{
-                    id
-                    name
-                  }
-                  database {
-                    name
-                    connectionType
-                  } 
-                  tables {
-                    name
-                  }
+                  id
                   query
-                }
-              }
+                  downstreamWorkbooks {
+                   id
+                   name
+                  }
+               }
             }
         """
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         resp_json = response.json()
-        for row in resp_json["data"]["customSQLTablesConnection"]["nodes"]:
-            row["tables"] = [row["name"] for row in row["tables"]]
+        for row in resp_json["data"]["customSQLTables"]:
             yield row
