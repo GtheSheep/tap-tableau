@@ -494,6 +494,63 @@ class PublishedDatasourcesMetadataStream(TableauMetadataStream):
             row["certifierLuid"] = row["owner"]["luid"]
             yield row
 
+class EmbeddedDatasourcesMetadataStream(TableauMetadataStream):
+    name = "embedded_datasources_metadata"
+    schema = th.PropertiesList(
+        th.Property("id", th.StringType),
+        th.Property("name", th.StringType),
+        th.Property("hasUserReference", th.BooleanType),
+        th.Property("hasExtracts", th.BooleanType),
+        th.Property("extractLastRefreshTime", th.DateTimeType),
+        th.Property("extractLastUpdateTime", th.DateTimeType),
+        th.Property("workbook", th.ArrayType(
+            th.ObjectType(
+                th.Property("id", th.StringType),
+                th.Property("luid", th.StringType),
+                th.Property("name", th.StringType),
+                th.Property("projectName", th.StringType),
+                th.Property("owner", th.ArrayType(
+                    th.ObjectType(
+                        th.Property("name", th.StringType),
+                        th.Property("username", th.StringType)
+                    )
+                ))
+            )
+        ))
+    ).to_dict()
+    primary_keys = ["id"]
+    replication_key = None
+
+    @property
+    def query(self) -> str:
+        return """
+            query embedded_datasources{
+                embeddedDatasources {
+                    id
+                    name
+                    hasUserReference
+                    hasExtracts
+                    extractLastRefreshTime
+                    extractLastUpdateTime
+                    workbook {
+                        id
+                        luid
+                        name
+                        projectName
+                        owner {
+                            name
+                            username
+                        }
+                    }
+                }
+            }
+        """
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        resp_json = response.json()
+        for row in resp_json["data"]["embeddedDatasources"]:
+            yield row
+
 
 class CustomSQLLocationsMetadataStream(TableauMetadataStream):
     name = "custom_sql_locations_metadata"
