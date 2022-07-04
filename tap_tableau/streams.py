@@ -631,8 +631,10 @@ class CalculatedFieldsMetadataStream(TableauMetadataStream):
                 th.Property("id", th.StringType),
                 th.Property("name", th.StringType),
                 th.Property("upstreamDatabases", th.ArrayType(
-                    th.Property("id", th.StringType),
-                    th.Property("name", th.StringType)
+                    th.ObjectType(
+                        th.Property("id", th.StringType),
+                        th.Property("name", th.StringType)
+                    )
                 )),
             )
         )),
@@ -643,30 +645,42 @@ class CalculatedFieldsMetadataStream(TableauMetadataStream):
             )
         )),
         th.Property("upstreamColumns", th.ArrayType(
-            th.Property("id", th.StringType),
-            th.Property("name", th.StringType)
+            th.ObjectType(
+                th.Property("id", th.StringType),
+                th.Property("name", th.StringType)
+            )
         )),
         th.Property("upstreamTables", th.ArrayType(
-            th.Property("id", th.StringType),
-            th.Property("name", th.StringType)
+            th.ObjectType(
+                th.Property("id", th.StringType),
+                th.Property("name", th.StringType)
+            )
         )),
         th.Property("upstreamDatabases", th.ArrayType(
-            th.Property("id", th.StringType),
-            th.Property("name", th.StringType)
+            th.ObjectType(
+                th.Property("id", th.StringType),
+                th.Property("name", th.StringType)
+            )
         )),
         th.Property("downstreamSheets", th.ArrayType(
-            th.Property("id", th.StringType),
-            th.Property("name", th.StringType)
+            th.ObjectType(
+                th.Property("id", th.StringType),
+                th.Property("name", th.StringType)
+            )
         )),
         th.Property("downstreamDashboards", th.ArrayType(
-            th.Property("id", th.StringType),
-            th.Property("name", th.StringType)
+            th.ObjectType(
+                th.Property("id", th.StringType),
+                th.Property("name", th.StringType)
+            )
         )),
         th.Property("downstreamWorkbooks", th.ArrayType(
-            th.Property("id", th.StringType),
-            th.Property("luid", th.StringType),
-            th.Property("name", th.StringType),
-            th.Property("projectName", th.StringType)
+            th.ObjectType(
+                th.Property("id", th.StringType),
+                th.Property("luid", th.StringType),
+                th.Property("name", th.StringType),
+                th.Property("projectName", th.StringType)
+            )
         ))
     ).to_dict()
     primary_keys = ["id"]
