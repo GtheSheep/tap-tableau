@@ -432,6 +432,25 @@ class PublishedDatasourcesMetadataStream(TableauMetadataStream):
         th.Property("hasUserReference", th.BooleanType),
         th.Property("hasExtracts", th.BooleanType),
         th.Property("siteLuid", th.StringType),
+        th.Property("fields", th.ArrayType(
+            th.ObjectType(
+                th.Property("id", th.StringType),
+                th.Property("name", th.StringType),
+                th.Property("fullyQualifiedName", th.StringType),
+                th.Property("upstreamTables", th.ArrayType(
+                    th.ObjectType(
+                        th.Property("id", th.StringType),
+                        th.Property("name", th.StringType)
+                    )
+                ))
+            )
+        )),
+        th.Property("upstreamTables", th.ArrayType(
+            th.ObjectType(
+                th.Property("id", th.StringType),
+                th.Property("name", th.StringType)
+            )
+        )),
         th.Property("projectName", th.StringType),
         th.Property("projectVizportalUrlId", th.StringType),
         th.Property("ownerId", th.StringType),
