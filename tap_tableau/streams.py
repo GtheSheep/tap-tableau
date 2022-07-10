@@ -465,6 +465,19 @@ class PublishedDatasourcesMetadataStream(TableauMetadataStream):
                 site{
                     luid
                 }
+                fields {
+                  id
+                  name
+                  fullyQualifiedName
+                  upstreamTables {
+                    id
+                    name
+                  }
+                }
+                upstreamTables {
+                  id
+                  name
+                }
                 projectName
                 projectVizportalUrlId
                 owner{
